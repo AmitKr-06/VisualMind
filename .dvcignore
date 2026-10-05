@@ -1,0 +1,13 @@
+# DVC should ignore Python bytecode, notebooks, and configs
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+notebooks/
+.env
+.env.*
+!.env.example
+logs/
+reports/
+.vscode/
+.idea/
+*.log
