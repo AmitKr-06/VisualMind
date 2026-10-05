@@ -92,21 +92,25 @@ def clean_text(text: str) -> str:
         Cleaned text.
     """
     try:
-        # 1. Running page header
+        # 1. Running page header (e.g. "Science82", "Life Processes 95",
+        #    "Science194 194194 194194")
+        #    FIX: balanced parentheses; the digits variant is captured by the
+        #    inner (?:[ \n\t]*\d{1,6})* group, not by a stray `)` inside `[]`.
         text = re.sub(
-            r"\s*(?:Science|Life Processes|Electricity)\s*\d{1,3}(?:[ \n\t\d{1,6})*[ \t]*\n",
+            r"\s*(?:Science|Life Processes|Electricity)\s*\d{1,3}(?:[ \n\t]*\d{1,6})*[ \t]*\n",
             " ",
             text,
         )
 
-        # 2. Chapter-opening page
+        # 2. Chapter-opening page:
+        #    "Life Processes 5CHAPTER How do..."  →  "How do..."
         text = re.sub(
             r"\s*(?:Life Processes|Electricity)\s*\d{1,2}\s*CHAPTER\s*([A-Z])\s*([a-z]+)",
             r"\1\2",
             text,
         )
 
-        # 3. Collapse repeated captions
+        # 3. Collapse repeated captions ("Figure 5.2Figure 5.2" → "Figure 5.2")
         text = re.sub(r"((?:Figure|Activity|Table)\s*\d+\.\d+)\1+", r"\1", text)
 
         # 4. Broken bullets and reprint footer
@@ -118,10 +122,10 @@ def clean_text(text: str) -> str:
         lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
         lines = [ln for ln in lines if ln not in ("?", "QUESTIONS")]
 
-        # 6. Rebuild paragraphs
+        # 6. Rebuild paragraphs from broken lines
         caption_start = re.compile(r"^(?:Figure|Activity|Table)\s*\d+\.\d+")
-        block_start = re.compile(r"^(?:\d{1,2}\.\s*[A-Z]|Example\s\d+\.\d+|Solution\b)")
-        heading = re.compile(r"^\d+\.\d+\s+[A-Z][A-Z ,'\-]{4,}")
+        block_start   = re.compile(r"^(?:\d{1,2}\.\s*[A-Z]|Example\s\d+\.\d+|Solution\b)")
+        heading       = re.compile(r"^\d+\.\d+\s+[A-Z][A-Z ,'\-]{4,}")
 
         paragraphs: List[str] = []
         for line in lines:
