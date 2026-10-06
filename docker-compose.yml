@@ -1,0 +1,90 @@
+# services:
+#   visualmind-api:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: visualmind:latest
+#     container_name: visualmind-api
+#     restart: unless-stopped
+#     ports:
+#       - "8000:8000"
+#     env_file:
+#       - .env
+#     environment:
+#       CUDA_VISIBLE_DEVICES: ""
+#       HF_HOME: /app/.cache/huggingface
+#       SENTENCE_TRANSFORMERS_HOME: /app/.cache/huggingface
+#       TOKENIZERS_PARALLELISM: "false"
+#     volumes:
+#       - ./data/raw/documents:/app/data/raw/documents:ro
+#       - ./data/processed:/app/data/processed:ro
+#       - ./data/extracted:/app/data/extracted:ro
+#       - ./data/embeddings:/app/data/embeddings:ro
+#       - ./data/eval:/app/data/eval:ro
+#       - ./data/vision_cache:/app/data/vision_cache
+#       - ./data/uploads:/app/data/uploads
+#       - ./data/results:/app/data/results
+#       - hf-cache:/app/.cache/huggingface
+#     healthcheck:
+#       test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+#       interval: 30s
+#       timeout: 10s
+#       start_period: 90s
+#       retries: 3
+#     networks:
+#       - visualmind-net
+
+# networks:
+#   visualmind-net:
+#     driver: bridge
+
+# volumes:
+#   hf-cache:
+#     driver: local
+
+services:
+  visualmind-api:
+    image: amiitkr/visualmind:latest
+    container_name: visualmind-api
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+      HF_HOME: /app/.cache/huggingface
+      SENTENCE_TRANSFORMERS_HOME: /app/.cache/huggingface
+      TOKENIZERS_PARALLELISM: "false"
+
+    volumes:
+      - ./data/raw/documents:/app/data/raw/documents:ro
+      - ./data/processed:/app/data/processed:ro
+      - ./data/extracted:/app/data/extracted:ro
+      - ./data/embeddings:/app/data/embeddings:ro
+      - ./data/eval:/app/data/eval:ro
+      - ./data/vision_cache:/app/data/vision_cache
+      - ./data/uploads:/app/data/uploads
+      - ./data/results:/app/data/results
+      - hf-cache:/app/.cache/huggingface
+
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 90s
+      retries: 3
+
+    networks:
+      - visualmind-net
+
+networks:
+  visualmind-net:
+    driver: bridge
+
+volumes:
+  hf-cache:
+    driver: local

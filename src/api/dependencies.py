@@ -34,9 +34,7 @@ def get_config() -> Dict[str, Any]:
 def get_retriever():
     from src.retrieval import get_retriever as _get
     cfg = get_config()
-    frozen = cfg["frozen"]
-    handoff = cfg["handoff"]
-    chunk_file = PROCESSED_DIR / handoff["chunk_file"]
+    chunk_file = PROCESSED_DIR / cfg["chunk_file"]
     logger.info(f"Building retriever from {chunk_file.name}")
     retriever = _get(chunk_file, with_reranker=True)
     logger.info("  retriever ready")
@@ -74,8 +72,7 @@ def get_image_analyzer():
 def get_workflow():
     from src.graphs import build_workflow
     cfg = get_config()
-    frozen = cfg["frozen"]
-    policy = frozen["policy"]
+    policy = cfg["policy"]
 
     logger.info("Building VisualMind workflow...")
     wf = build_workflow(
@@ -96,16 +93,14 @@ def get_workflow():
 @lru_cache(maxsize=1)
 def get_metadata() -> Dict[str, Any]:
     cfg = get_config()
-    handoff = cfg["handoff"]
-    frozen = cfg["frozen"]
-    policy = frozen["policy"]
+    policy = cfg["policy"]
     return {
         "nodes": ["router", "retrieval", "answer", "reflection", "responder"],
-        "chunk_file": handoff["chunk_file"],
+        "chunk_file": cfg["chunk_file"],
         "policy": policy,
-        "choice1": frozen["choice1"],
-        "choice2": frozen["choice2"],
-        "models": handoff["models"],
+        "choice1": cfg["choice1"],
+        "choice2": cfg["choice2"],
+        "models": cfg["models"],
     }
 
 # ============================================================

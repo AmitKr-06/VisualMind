@@ -1,10 +1,14 @@
-from setuptools import find_packages, setup
+"""
+VisualMind — setup.py for editable installs.
+Run: pip install -e .
+"""
+from setuptools import setup, find_packages
 
 setup(
-    name='src',
-    packages=find_packages(),
-    version='0.1.0',
-    description='A multimodal AI platform combining RAG, computer vision, OCR, LangChain, LangGraph, and Gemini API to understand documents, images, and text and generate grounded answers.',
-    author='Amit Kumar',
-    license='',
+    name="visualmind",
+    version="1.0.0",
+    description="Multimodal RAG pipeline for NCERT Class 10 Science",
+    packages=find_packages(include=["src", "src.*"]),
+    python_requires=">=3.10",
+    install_requires=[],   # dependencies are declared in requirements.txt
 )

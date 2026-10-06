@@ -1,0 +1,77 @@
+# Git & VCS
+.git
+.gitignore
+.gitattributes
+.dvc
+.dvcignore
+.github
+
+# Python cache
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.ipynb_checkpoints
+
+# Virtual envs
+.venv
+venv
+env
+ENV
+
+# Notebooks
+notebooks/
+*.ipynb
+
+# Data — mounted at runtime
+data/raw/
+data/interim/
+data/processed/
+data/extracted/
+data/embeddings/
+data/vectorstore/
+data/vision_cache/
+data/results/
+data/uploads/
+!data/eval/
+
+# Model weights
+models/
+
+# Logs
+logs/
+*.log
+reports/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs
+docs/
+references/
+tests/
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Misc
+Makefile
+tox.ini
+setup.py
+pyproject.toml
+test_environment.py

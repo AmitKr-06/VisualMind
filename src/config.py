@@ -74,7 +74,6 @@ def load_config() -> dict:
         cs = frozen.get("chunk_size", 1000)
         candidate = f"chunks_{cv}_{cs}.jsonl"
         # If that file exists, use it; otherwise try chunks.jsonl
-        from src.config import PROCESSED_DIR  # already imported above
         if (PROCESSED_DIR / candidate).exists():
             merged_handoff["chunk_file"] = candidate
         else:
@@ -110,4 +109,6 @@ def load_config() -> dict:
     if "figure_dir" not in merged_handoff:
         merged_handoff["figure_dir"] = str(EXTRACT_DIR / "figures")
 
-    return {"handoff": merged_handoff, "frozen": frozen}
+    # Frozen is the source of truth; handoffs override pipeline fields.
+    merged = {**frozen, **merged_handoff}
+    return merged

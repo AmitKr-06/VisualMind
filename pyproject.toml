@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visualmind"
+version = "1.0.0"
+description = "Multimodal RAG pipeline for NCERT Class 10 Science"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Amit Kumar" }
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "notebooks",
+    "data",
+]
