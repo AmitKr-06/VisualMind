@@ -100,16 +100,12 @@ def router_node(state: VMState) -> Dict[str, Any]:
 
 
 # ============================================================
-# Node 2 — retrieval
+# Node 2 — retrieval (factory)
 # ============================================================
 def retrieval_node(state: VMState) -> Dict[str, Any]:
     """
-    Build the evidence package.
-
-    Requires these dependencies to be set in `config["configurable"]`:
-      - text_retriever
-      - figure_matcher (optional)
-      - image_analyzer (optional)
+    Placeholder — the real node is created by `make_retrieval_node()`,
+    which binds the retriever / matcher / analyzer dependencies.
     """
     raise RuntimeError(
         "retrieval_node must be called with dependencies injected via closure. "
@@ -258,26 +254,42 @@ def reflection_node(state: VMState) -> Dict[str, Any]:
 
 
 # ============================================================
-# Node 5 — responder
+# Node 5 — responder  (FIXED)
 # ============================================================
 def responder_node(state: VMState) -> Dict[str, Any]:
     try:
         ps = state.get("package_status", "ok")
+        answerable = state.get("answerable")
 
+        # --- Determine final status ---
         if ps == "no_evidence":
             final_status = "no_evidence"
         elif ps == "out_of_scope":
             final_status = "out_of_scope"
         elif state.get("citation_errors"):
             final_status = "citation_problem"
+        elif answerable is False:
+            # LLM judged the evidence insufficient → treat as no_evidence
+            final_status = "no_evidence"
         else:
             final_status = "ok"
+
+        # --- Refusal: rewrite answer text and clear citations ---
+        answer_text = state.get("answer") or ""
+        citations   = state.get("citations") or []
+
+        if final_status == "no_evidence":
+            answer_text = "I don't have enough evidence in the provided chapters to answer this."
+            citations = []
+        elif final_status == "out_of_scope":
+            answer_text = "This question is outside the scope of the provided chapters."
+            citations = []
 
         final = {
             "status":       final_status,
             "question":     state.get("question"),
-            "answer":       state.get("answer") or "",
-            "citations":    state.get("citations") or [],
+            "answer":       answer_text,
+            "citations":    citations,
             "used_chunks":  state.get("used_chunks", []),
             "used_figures": state.get("used_figures", []),
             "confidence":   float(state.get("confidence", 0.0)),

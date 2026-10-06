@@ -92,7 +92,10 @@ def load_embedding_model(model_name: str = DEFAULT_MODEL) -> SentenceTransformer
         model = SentenceTransformer(model_name, device=device)
         _model_cache[model_name] = model
 
-        dim = model.get_sentence_embedding_dimension()
+        try:
+            dim = model.get_embedding_dimension()
+        except AttributeError:
+            dim = model.get_sentence_embedding_dimension()
         logger.info(f"  loaded — dim={dim}, max_seq_length={model.max_seq_length}")
         return model
 
