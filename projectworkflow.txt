@@ -1,0 +1,150 @@
+------------------------------------Setting up Project Structure---------------------------------------
+
+1. Create repo, clone it in local
+2. Create a virtual env named 'visualmind' - conda create -n visualmind python=3.12
+3. Activate the virtual env - conda activate visualmind
+4. pip install cookiecutter
+5. cookiecutter -c v1 https://github.com/drivendata/cookiecutter-data-science
+6. Rename src.models -> src.model
+7. git add, commit and push
+
+
+
+
+PHASE 0
+☐ Define problem
+☐ Define users
+☐ Define inputs/outputs
+☐ Define MVP
+
+PHASE 1
+☐ Git repository
+☐ Python environment
+☐ Cookiecutter/project structure
+☐ Configuration
+☐ Logging
+☐ Environment variables
+
+PHASE 2
+☐ PDF loading
+☐ TXT loading
+☐ DOCX loading
+☐ Cleaning
+☐ Metadata
+
+PHASE 3 — RAG V1
+☐ Chunking
+☐ Embeddings
+☐ FAISS
+☐ Retrieval
+☐ Gemini
+☐ Basic RAG
+
+PHASE 4 — ADVANCED RAG
+☐ Metadata filtering
+☐ Query rewriting
+☐ Multi-query
+☐ HyDE
+☐ Hybrid search
+☐ Reranking
+☐ Context compression
+☐ Parent-child retrieval
+☐ Retrieval evaluation
+
+PHASE 5 — COMPUTER VISION
+☐ OpenCV
+☐ Image preprocessing
+☐ Classification
+☐ YOLO
+☐ Object detection
+☐ Image embeddings
+
+PHASE 6 — DOCUMENT VISION
+☐ OCR
+☐ Scanned PDFs
+☐ Tables
+☐ Charts
+☐ Layout information
+
+PHASE 7 — MULTIMODAL
+☐ Image + text
+☐ Image + RAG
+☐ Document + image
+☐ Evidence fusion
+☐ Gemini multimodal reasoning
+
+PHASE 8 — LANGCHAIN
+☐ Components
+☐ Chains
+☐ Retrievers
+☐ Structured outputs
+☐ Tools
+
+PHASE 9 — LANGGRAPH
+☐ State
+☐ Nodes
+☐ Edges
+☐ Conditional routing
+☐ RAG node
+☐ Vision node
+☐ Evidence node
+☐ Generation node
+
+PHASE 10 — MODEL ROUTING
+☐ Query classification
+☐ Text route
+☐ Vision route
+☐ Multimodal route
+☐ Fallback route
+
+PHASE 11 — EVALUATION
+☐ Evaluation dataset
+☐ Retrieval metrics
+☐ Generation metrics
+☐ Latency
+☐ Cost
+☐ Error rate
+
+PHASE 12 — FASTAPI
+☐ Upload API
+☐ Query API
+☐ Image API
+☐ Multimodal API
+☐ Health API
+
+PHASE 13 — MLOPS
+☐ Git
+☐ DVC
+☐ MLflow
+☐ Experiment tracking
+☐ Model/config versioning
+
+PHASE 14 — DOCKER
+☐ Dockerfile
+☐ Docker image
+☐ Container
+☐ Environment configuration
+
+PHASE 15 — AWS
+☐ Cloud architecture
+☐ Storage
+☐ API deployment
+☐ Vector DB
+☐ Secrets
+
+PHASE 16 — MONITORING
+☐ Prometheus
+☐ Grafana
+☐ Logs
+☐ Latency monitoring
+☐ Error monitoring
+
+PHASE 17 — FINAL
+☐ Tests
+☐ Security
+☐ Documentation
+☐ Architecture diagram
+☐ README
+☐ Demo
+☐ Resume bullets
+☐ GitHub cleanup

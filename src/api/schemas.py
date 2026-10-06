@@ -73,3 +73,26 @@ class ConfigResponse(BaseModel):
     reranker_model: str
     answer_model_chain: List[str]
     fallback_provider: Optional[str] = None
+
+# ============================================================
+# Upload
+# ============================================================
+class UploadResponse(BaseModel):
+    session_id: str
+    filename: str
+    kind: str                 # "pdf" | "image"
+    chunks_added: int
+    total_chunks: int
+    ready: bool = True
+
+
+class SessionInfo(BaseModel):
+    session_id: str
+    n_files: int
+    n_chunks: int
+    age_seconds: float
+
+
+class SessionListResponse(BaseModel):
+    sessions: List[SessionInfo]
+    count: int

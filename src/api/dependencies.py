@@ -107,3 +107,15 @@ def get_metadata() -> Dict[str, Any]:
         "choice2": frozen["choice2"],
         "models": handoff["models"],
     }
+
+# ============================================================
+# Session dependency (for module 10)
+# ============================================================
+def require_session(session_id: str):
+    """FastAPI dependency: fetch a session by id or raise 404."""
+    from fastapi import HTTPException
+    from src.api.session_store import get_session
+    sess = get_session(session_id)
+    if sess is None:
+        raise HTTPException(404, f"Session not found: {session_id}")
+    return sess

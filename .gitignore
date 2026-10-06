@@ -216,3 +216,105 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- VisualMind additions ----
+
+# VS Code
+.vscode/
+
+# Notebooks (experiments)
+notebooks/
+
+# Text output folder (change "txt/" to your actual folder name)
+txt/
+
+# Data (large files; track with DVC later, not Git)
+# Data (large files; track with DVC later, not Git)
+data/raw/*
+data/interim/*
+data/processed/*
+data/extracted/*
+data/embeddings/*
+data/vectorstore/*
+data/vision_cache/*
+data/results/*
+data/eval/*
+data/external/*
+
+# But always keep the folder markers and DVC pointer files
+!data/**/.gitkeep
+!data/**/*.dvc
+
+# Vector DB / index files
+chroma_db/
+faiss_index/
+*.faiss
+*.index
+
+# Models and weights
+models/
+*.pt
+*.pth
+*.onnx
+*.h5
+
+# Experiment tracking
+mlruns/
+wandb/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# NEW additions (added for Exp 10 + DVC)
+# ============================================================
+
+# --- Secrets (never commit) ---
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+service_account.json
+
+# --- Data folders we missed (DVC-tracked) ---
+data/extracted/*
+data/embeddings/*
+data/vectorstore/*
+data/vision_cache/*
+data/uploads/
+data/results/*
+data/eval/*
+!data/extracted/.gitkeep
+!data/embeddings/.gitkeep
+!data/vectorstore/.gitkeep
+!data/vision_cache/.gitkeep
+!data/results/.gitkeep
+!data/eval/.gitkeep
+
+# --- Logs & reports ---
+logs/
+reports/
+docs/_build/
+
+# --- DVC cache & temp ---
+.dvc/cache/
+.dvc/tmp/
+.dvc/config.local
+
+# --- FastAPI / Flask runtime ---
+*.pid
+*.sock
+flask_app/instance/
+
+# --- Build artifacts ---
+src.egg-info/
+*.egg-info/
+
+# --- Notebooks — keep README only ---
+notebooks/*.ipynb
+!notebooks/README.md
+
+# --- DVC-tracked data pointer files are OK (these are .dvc, not data) ---
+# (no ignore rule needed — .dvc files should be committed)

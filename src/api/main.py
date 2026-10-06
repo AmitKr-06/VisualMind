@@ -1,59 +1,49 @@
-"""
-FastAPI application — VisualMind REST API.
-
-Endpoints:
-  GET  /health      — liveness
-  GET  /config      — frozen pipeline metadata
-  POST /ask         — single question
-  POST /ask/batch   — batch of questions
-
-Run with:
-  uvicorn src.api_app:app --reload
-"""
+"""FastAPI application — VisualMind REST API + Web UI."""
 from __future__ import annotations
 
 import logging
-import sys
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from src.api.dependencies import (
     get_workflow, get_metadata, get_retriever,
     get_figure_matcher, get_image_analyzer,
 )
-from src.api.routes import ask_router
+from src.api.routes import ask_router, upload_router
 from src.api.schemas import HealthResponse, ConfigResponse
+from src.api.ui import router as ui_router
 
 logger = logging.getLogger("visualmind.api.main")
 
 
-# ============================================================
-# Lifespan — warm up singletons at startup
-# ============================================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("=" * 60)
     logger.info("Starting VisualMind API — warming up...")
     logger.info("=" * 60)
 
-    # Build every singleton ONCE so requests are fast
     get_retriever()
     get_figure_matcher()
     get_image_analyzer()
     get_workflow()
 
+    # Start the cleanup task (module 10)
+    import asyncio
+    from src.api.cleanup import cleanup_loop
+    task = asyncio.create_task(cleanup_loop())
+
     logger.info("=" * 60)
     logger.info("VisualMind API ready")
     logger.info("=" * 60)
     yield
+    task.cancel()
     logger.info("Shutting down VisualMind API")
 
 
-# ============================================================
-# App
-# ============================================================
 app = FastAPI(
     title="VisualMind API",
     description="Multimodal RAG pipeline for NCERT Class 10 Science.",
@@ -70,18 +60,12 @@ app.add_middleware(
 )
 
 
-# ============================================================
-# Health + Config
-# ============================================================
 @app.get("/health", response_model=HealthResponse, tags=["meta"])
 def health():
     meta = get_metadata()
     return HealthResponse(
-        status="ok",
-        graph="VisualMindGraph",
-        version="v1",
-        nodes=meta["nodes"],
-        models=meta["models"],
+        status="ok", graph="VisualMindGraph", version="v1",
+        nodes=meta["nodes"], models=meta["models"],
     )
 
 
@@ -103,7 +87,12 @@ def config():
     )
 
 
-# ============================================================
-# Mount routers
-# ============================================================
+# Routers
 app.include_router(ask_router)
+app.include_router(upload_router)
+app.include_router(ui_router)
+
+# Static files (CSS + JS)
+STATIC_DIR = Path(__file__).parent / "static"
+STATIC_DIR.mkdir(exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
